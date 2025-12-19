@@ -1,0 +1,35 @@
+name: Daily Auto Commit Bot
+
+# COMPONENT 1: TRIGGERS
+on:
+  schedule:
+    - cron: "0 0 * * *"  # Runs every day at Midnight UTC
+  workflow_dispatch:      # Allows you to click a button to test it manually
+
+# COMPONENT 2: PERMISSIONS (Crucial for 2025 security standards)
+permissions:
+  contents: write
+
+# COMPONENT 3: THE JOB
+jobs:
+  auto-commit:
+    runs-on: ubuntu-latest  # The Virtual Machine (VM) used
+
+    steps:
+      # Step A: Download your repo to the VM
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      # Step B: Modify a file (The "Work")
+      - name: Update Date Log
+        run: |
+          echo "Bot activity: $(date)" >> last_run.txt
+
+      # Step C: Save changes back to GitHub
+      - name: Commit and Push
+        run: |
+          git config --global user.name "Nickpatil455"
+          git config --global user.email "gujarnick2003@gmail.com"
+          git add last_run.txt
+          git commit -m "Automated daily update"
+          git push
